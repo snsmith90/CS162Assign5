@@ -1,0 +1,29 @@
+var 
+  mod = (n, d) => 
+  { 
+    if (n < d) n else mod(n-d, d) 
+  },
+
+  gcd = (a, b) => 
+  {
+    var r = 0 in
+    while (b != 0) {
+      r := mod(a, b);
+      a := b;
+      b := r
+    };
+    output "the GCD is: ";
+    output a
+  },
+
+  a = 0, 
+  b = 0
+in 
+
+output "first number: ";
+a := input num;
+
+output "second number: ";
+b := input num;
+
+gcd(a, b)

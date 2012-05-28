@@ -1,0 +1,5 @@
+var x, y in
+
+x := 0;
+if (input alice num) { y := x };
+output bob y

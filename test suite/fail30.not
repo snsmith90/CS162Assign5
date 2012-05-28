@@ -1,0 +1,1 @@
+output public if (input alice num) { var x in x }

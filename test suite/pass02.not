@@ -1,0 +1,16 @@
+var x, y, z in
+
+x := input alice num;
+
+while (x <= 42) {
+  if (y) {
+    z := input bob num;
+    y := x + z
+  };
+
+  x := x + 1
+};
+
+output alice x;
+output secret y;
+output secret z

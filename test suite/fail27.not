@@ -1,0 +1,4 @@
+var x, y in
+
+if (input bob num) { x := y } else { y := x };
+output public x+y

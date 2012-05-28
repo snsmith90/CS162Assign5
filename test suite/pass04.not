@@ -1,0 +1,8 @@
+var x in
+
+x := if (input public num) { input alice num } else { input bob num };
+output secret x;
+
+x := (input alice num) + (input bob num);
+output secret x
+

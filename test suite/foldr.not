@@ -1,0 +1,15 @@
+var
+  foldR = ( term, op ) => 
+    {
+      var fold = ( list ) => {
+        if (list = []) term
+        else op( list.head, fold( list.tail ) )
+      }
+      in fold
+    },
+
+  sum    = foldR( 0, (a, b) => { a+b } ),
+  length = foldR( 0, (a, b) => { 1+b } )
+in
+output sum( [1, 2, 3] );
+output length( [1, 2, 3] )

@@ -1,0 +1,20 @@
+var
+  addToN = (init) => {
+    var first = init,
+        add = (n) => { first + n }
+    in add
+  },
+
+  addToS = (init) => {
+    var first = init,
+        add = (n) => { first + n }
+    in add
+  },
+
+  f1 = addToN(1),
+  r1 = f1(12),
+  f2 = addToS(""),
+  r2 = f2("bob")
+in 
+output r1;
+output r2

@@ -1,0 +1,12 @@
+var x, y, z in
+
+x := input public num;
+
+if (x) {
+  y := input alice num;
+  if (y) { z := input bob num }
+};
+
+output public x;
+output alice y;
+output secret z

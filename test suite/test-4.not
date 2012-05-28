@@ -1,0 +1,7 @@
+var
+  fact = (n) => { if (n <= 0) 1 else n * fact(n-1) },
+  even = (n) => { if (n = 0) true else odd(n-1) },
+  odd  = (n) => { if (n = 0) false else even(n-1) }
+in
+output fact(3);
+output even(42)

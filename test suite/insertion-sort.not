@@ -1,0 +1,34 @@
+var
+  get_num = () => 
+  {
+    output "next number (0 to stop):";
+    input num
+  },
+    
+  insert = (list, n) => 
+  {
+    if (list = []) [n]
+    else if (list.head < n) list.head :: insert(list.tail, n)
+    else n :: list
+  },
+
+  print_list = (list) => 
+  {
+    if (list != []) {
+      output list.head;
+      print_list(list.tail)
+    }
+  },
+
+  curr_num = 0,
+  list = []
+in
+
+curr_num := get_num();
+
+while (curr_num != 0) {
+  list := insert(list, curr_num);
+  curr_num := get_num()
+};
+
+print_list(list)

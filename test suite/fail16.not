@@ -1,0 +1,11 @@
+var a, b, c in
+
+a := input secret num;
+b := true;
+
+c := b = a; 
+if (c) {
+  b := false
+};
+
+output public b
