@@ -1,0 +1,27 @@
+These files implement an explicit type checker for the miniJS (lists)
+version extended with syntactic type annotations.
+
+– MANIFEST –
+
+README			: this file
+checker.scala   	: the main entry point
+syntax.scala		: defines the language AST and parser
+types.scala		: defines the language types
+util.scala		: defines an AST fold function and a pretty-printer
+
+makefile		: rules for building the interpreter
+build/			: where the compiled binaries go
+test suite/		: a set of test programs
+
+– TO COMPILE AND RUN –
+
+1. make
+2. cd build/
+3. scala Checker <program>
+
+Instead of type-checking a program in the last step you can get a
+postscript image of the program's abstract syntax tree:
+
+3. scala Checker <program> --ast
+4. dot -Tps -o ast.ps ast.dot
+5. evince ast.ps (or use your favorite postscript viewer)
