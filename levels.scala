@@ -15,10 +15,10 @@ sealed abstract class Level {
     case _ ⇒ throw illtyped
   }  */
 
-  def ⊑( l:Level ) : Boolean = {
+ /* def ⊑( l:Level ) : Boolean = {
     true
 
-  }
+  }  */
 
   // return the set of type variable in this type
  /* def tvars: Set[TVar] = this match {
@@ -59,48 +59,20 @@ sealed abstract class Level {
   def neg: Level    */
 }
 
-case class Bob() extends Level {
-  def  + ( l:Level ) = { if ( Bob() ⊑ l ) l else if (l ⊑ Bob()) Bob() else Secret() }
-  def  − ( l:Level ) = { if ( Bob() ⊑ l ) l else if (l ⊑ Bob()) Bob() else Secret() }
-  def  × ( l:Level ) = { if ( Bob() ⊑ l ) l else if (l ⊑ Bob()) Bob() else Secret() }
-  def  ÷ ( l:Level ) = { if ( Bob() ⊑ l ) l else if (l ⊑ Bob()) Bob() else Secret() }
-  def  ≤ ( l:Level ) = { if ( Bob() ⊑ l ) l else if (l ⊑ Bob()) Bob() else Secret() }
-  def  < ( l:Level ) = { if ( Bob() ⊑ l ) l else if (l ⊑ Bob()) Bob() else Secret() }
-  def :: ( l:Level ) = throw illtyped
-  def neg = Bob()
+case object Bob extends Level {
+
 }
 
-case class Alice() extends Level {
-  def  + ( l:Level ) = { if ( Alice() ⊑ l ) l else if (l ⊑ Alice()) Alice() else Secret() }
-  def  − ( l:Level ) = { if ( Alice() ⊑ l ) l else if (l ⊑ Alice()) Alice() else Secret() }
-  def  × ( l:Level ) = { if ( Alice() ⊑ l ) l else if (l ⊑ Alice()) Alice() else Secret() }
-  def  ÷ ( l:Level ) = { if ( Alice() ⊑ l ) l else if (l ⊑ Alice()) Alice() else Secret() }
-  def  ≤ ( l:Level ) = { if ( Alice() ⊑ l ) l else if (l ⊑ Alice()) Alice() else Secret() }
-  def  < ( l:Level ) = { if ( Alice() ⊑ l ) l else if (l ⊑ Alice()) Alice() else Secret() }
-  def :: ( l:Level ) = throw illtyped
-  def neg = Alice()
+case object Alice extends Level {
+
 }
 
-case class Public() extends Level {
-   def  + ( l:Level ) = { l }
-   def  − ( l:Level ) = { l }
-   def  × ( l:Level ) = { l }
-   def  ÷ ( l:Level ) = { l }
-   def  ≤ ( l:Level ) = { l }
-   def  < ( l:Level ) = { l }
-   def :: ( l:Level ) = throw illtyped
-   def neg = Public()
+case object Public extends Level {
+
  }
 
-case class Secret() extends Level {
-   def  + ( l:Level ) = { Secret() }
-  def  − ( l:Level ) = { Secret() }
-  def  × ( l:Level ) = { Secret() }
-  def  ÷ ( l:Level ) = { Secret() }
-  def  ≤ ( l:Level ) = { Secret() }
-  def  < ( l:Level ) = { Secret() }
-  def :: ( l:Level ) = throw illtyped
-  def neg = Secret()
+case object Secret extends Level {
+
 }
 
 

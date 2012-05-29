@@ -14,7 +14,7 @@ object Checker {
       //printDot( ast )
     else */
       //println( (inScope( Env(), Public() ) eval ast).find )
-      inScope( Env(), Public() ).eval(ast)
+      inScope( Env(), Public ).eval(ast)
   }
   
 }
@@ -120,6 +120,7 @@ case class inScope( ρ:Env, l_w:Level ) {
     }
 
     // TODO: Comeback to
+    // Assign variables to Li
     case Let( xes, t ) ⇒ 
     {
      /* val (xs, es) = xes unzip;
