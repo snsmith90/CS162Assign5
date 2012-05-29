@@ -14,128 +14,126 @@ object Checker {
       //printDot( ast )
     else */
       //println( (inScope( Env(), Public() ) eval ast).find )
-      inScope( Env(), Public ).eval(ast)
+      inScope( Env() ).eval(Public, ast)
   }
   
 }
-
+                        //HELP
 // type environment
-case class Env( env:Map[String, Level] = Map() ) {
+case class Env( env:Map[String, LVar] = Map() ) {
 
   // retrieve a variable's type or throw exception if variable
   // isn't in the environment
-  def apply( x:String ): Level =
+  def apply( x:String ): LVar =     ///Should we return LVar here?
     env get x match {
       case Some(l) ⇒ l
       case None ⇒ throw illtyped
     }  
 
-  def ++( bindings:Seq[(String, Level)] ): Env =
+  def ++( bindings:Seq[(String, LVar)] ): Env =
     Env( env ++ bindings )
 
-  def +++( bindings:Seq[(Var, Level)] ): Env =
+  def +++( bindings:Seq[(Var, LVar)] ): Env =      ///HELP
     this ++ ( bindings map { case (x, l) ⇒ (x.x, l) } )
 }
 
 
 // every term is typechecked inside a scope corresponding to a
 // particular environment
-case class inScope( ρ:Env, l_w:Level ) {
+case class inScope( ρ:Env ) {
+      def eval( l:Level, t:Term ): Level = t match {
+        case Then( ts ) ⇒
+          (ts map eval) last              //for each loops through ts and calls eval returns level of last term
 
-  def eval( t:Term ): Level = t match {
-    case Then( ts ) ⇒ 
-      (ts map eval) last
-    
-    case Assign( Var(x), e ) ⇒ 
-    {
-      eval( e ) ⊑ ρ( x )
-      l_w ⊑ ρ( x )
-      l_w
-    }
-    
-    case w @ While( e, t ) ⇒ 
-    {
-      eval( e )
-      eval( t )
-      l_w
-    }
+        case Assign( Var(x), e ) ⇒
+        {
+          eval( e ) ⊑ ρ( x )
+          l_w ⊑ ρ( x )
+          l_w
+        }
 
-    case Output( e, l ) ⇒
-    {
-      l_w ⊑ l
-      eval( e ) ⊑ l
-      l_w
-    }
-    
-    case Num( n ) ⇒ 
-      l_w
+        case w @ While( e, t ) ⇒
+        {
+          eval( e )
+          eval( t )
+          l_w
+        }
 
-    case Bool( b ) ⇒ 
-      l_w
-      
-    case Str( s ) ⇒ 
-      l_w
-      
-    case Undef() ⇒ 
-      l_w
+        case Output( e, l ) ⇒
+        {
+          l_w ⊑ l
+          eval( e ) ⊑ l
+          l_w
+        }
 
-    case Var( x ) ⇒
-      l_w ⊑ L()
-      ρ( x ) ⊑ L()
-      L()
+        case Num( n ) ⇒
+          l_w
 
-    case UnOp( op, e ) ⇒ 
-    {
-      eval( e )
-    }
-    
-    case BinOp( op, e1, e2 ) ⇒ 
-    {
-      val l1 = eval( e1 )
-      val l2 = eval( e2 )
+        case Bool( b ) ⇒
+          l_w
 
-      l1 ⊑ L()
-      l2 ⊑ L()
+        case Str( s ) ⇒
+          l_w
 
-      L()
-    }
+        case Undef() ⇒
+          l_w
 
-    // we're not sure about l2 and l3
-    case If( e, t1, t2 ) ⇒ 
-    {
-      val l1 = eval( e )
-      val l2 = inScope( Env(), l1 ).eval(t1)
-      val l3 = inScope( Env(), l1 ).eval(t2)
+        case Var( x ) ⇒
+          l_w ⊑ L()
+          ρ( x ) ⊑ L()
+          L()
 
-      l2 ⊑ L()
-      l3 ⊑ L()
+        case UnOp( op, e ) ⇒
+        {
+          eval( e )
+        }
 
-      L()
-    }
-    
-    case In( typ, l ) ⇒ {
-      l_w ⊑ L()
-      l ⊑ L()
-      L()
-    }
+        case BinOp( op, e1, e2 ) ⇒
+        {
+          val l1 = eval( e1 )
+          val l2 = eval( e2 )
 
-    // TODO: Comeback to
-    // Assign variables to Li
-    case Let( xes, t ) ⇒ 
-    {
-     /* val (xs, es) = xes unzip;
-      val xτs = xs map { case _ ⇒ LVar() }
+          l1 ⊑ L()
+          l2 ⊑ L()
 
-      l_w ⊑ L()
+          L()
+        }
+
+        // we're not sure about l2 and l3
+        case If( e, t1, t2 ) ⇒
+        {
+          val l1 = eval( e )
+          val l2 = inScope( Env(), l1 ).eval(t1)
+          val l3 = inScope( Env(), l1 ).eval(t2)
+
+          l2 ⊑ L()
+          l3 ⊑ L()
+
+          L()
+        }
+
+        case In( typ, l ) ⇒ {
+          l_w ⊑ L()
+          l ⊑ L()
+          L()
+        }
+
+        // TODO: Comeback to
+        // Assign variables to Li
+        case Let( xes, t ) ⇒
+        {
+         /* val (xs, es) = xes unzip;
+          val xτs = xs map { case _ ⇒ LVar() }
+
+          l_w ⊑ L()
 
 
-      val ρ1 = ρ +++ (xs zip xτs)
-      val eτs = es map ( inScope( ρ1 ) eval(_) )
+          val ρ1 = ρ +++ (xs zip xτs)
+          val eτs = es map ( inScope( ρ1 ) eval(_) )
 
-      (xτs zip eτs) foreach { case (τ1, τ2) ⇒ τ1 ≡ τ2 }
-      inScope( ρ1 ) eval( t ) */
-      L()
-    }
-  }
-
+          (xτs zip eτs) foreach { case (τ1, τ2) ⇒ τ1 ≡ τ2 }
+          inScope( ρ1 ) eval( t ) */
+          L()
+        }
+      }
 }

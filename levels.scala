@@ -89,8 +89,10 @@ case class L() extends Level {
    def neg = Public()   */
  }
 
+case class LVar(x:String, var ann:Boolean) extends Level {
 
-/*object LVar {
+}
+object LVar {
   var id = 0;
 
   def apply(ann:Boolean = false): LVar =
@@ -98,7 +100,7 @@ case class L() extends Level {
     id += 1
     new LVar("L" + id, ann)
   }
-}     */
+}
 
  /*
 case class NumT() extends Type {
