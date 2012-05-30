@@ -1,4 +1,5 @@
 package cs162.miniJS.levels
+import scala.collection.mutable.{ Queue, Set, List }
 
 // exception for illtyped programs
 object illtyped extends Exception
@@ -89,16 +90,16 @@ case class L() extends Level {
    def neg = Public()   */
  }
 
-case class LVar(x:String, var ann:Boolean) extends Level {
+case class LVar(x:String) extends Level {
 
 }
 object LVar {
   var id = 0;
 
-  def apply(ann:Boolean = false): LVar =
+  def apply(): LVar =
   {
     id += 1
-    new LVar("L" + id, ann)
+    new LVar("L" + id)
   }
 }
 
@@ -213,3 +214,19 @@ object TVar {
 
 
 */
+
+// element 0 in each subset in bigSet denotes the level the set belongs to
+object setOfSets {
+	var bigSet = Set.empty[List[Level]]
+	var littleTempSet = Set.empty[Level]
+
+	def addToBigSet( l:Level ) {
+		littleTempSet += l
+		bigSet += littleTempSet.clone
+		littleTempSet.clear()
+	}
+}
+
+object BFSqueue {
+	var queue = new Queue()
+}
