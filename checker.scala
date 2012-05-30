@@ -1,7 +1,7 @@
 import scala.io._
 import cs162.miniJS.syntax._
 import cs162.miniJS.levels._
-import scala.collection.mutable.{ Queue, Set, List }
+import scala.collection.mutable.{ Queue, Set, ListBuffer }
 
 // the main entry point
 object Checker {
@@ -27,7 +27,7 @@ object Checker {
 
 
 
-      evalLevel().eval(Env(),Public, ast)
+    evalLevel().eval(Env(),Public, ast)
 
 		println("bigSet: " +setOfSets.bigSet)
   }
@@ -70,22 +70,26 @@ case class evalLevel(){
            var l1 = eval( ρ, l_w, e )
            var l2 =  ρ( x )
           println("Assign " + l1 + " ⊑ " + l2)
+					setOfSets.addToListBuffer(l1, l2)
           println("Assign " + l_w + " ⊑ " + l2)
+					setOfSets.addToListBuffer(l_w, l2)
           l_w
         }
 
         case w @ While( e, t ) ⇒
         {
-          //eval( e )
-          //eval( t )
+          eval( ρ, l_w, e )
+          eval( ρ, l_w, t )
           l_w
         }
 
         case Output( e, l ) ⇒
         {
           println("Output " + l_w + " ⊑ " + l)
+					setOfSets.addToListBuffer(l_w, l)
           var l1 = eval( ρ, l_w, e )
           println("Output " + l1 + " ⊑ " + l)
+					setOfSets.addToListBuffer(l1, l)
           l_w
         }
 
@@ -106,9 +110,9 @@ case class evalLevel(){
 					 setOfSets.addToBigSet(L)
            var l1 = ρ( x )
            println("Var " + l_w + " ⊑ " + L)
+						setOfSets.addToListBuffer(l_w, L)
            println("Var " + l1 + " ⊑ " + L)
-          //l_w ⊑ L()
-          //ρ( x ) ⊑ L()
+						setOfSets.addToListBuffer(l1, L)
           L
 
         case UnOp( op, e ) ⇒
@@ -123,7 +127,9 @@ case class evalLevel(){
           var L = LVar()
 					setOfSets.addToBigSet(L)
           println("BinOp " + l1 + " ⊑ " + L)
+					setOfSets.addToListBuffer(l1, L)
           println("BinOP " + l2 + " ⊑ " + L)
+					setOfSets.addToListBuffer(l2, L)
 
           L
         }
@@ -137,7 +143,9 @@ case class evalLevel(){
           var L = LVar()
 					setOfSets.addToBigSet(L)
           println("If " + l2 + " ⊑ " + L)
+					setOfSets.addToListBuffer(l2, L)
           println("If " + l3 + " ⊑ " + L)
+					setOfSets.addToListBuffer(l3, L)
 
           L
         }
@@ -146,9 +154,9 @@ case class evalLevel(){
             var L = LVar()
 					  setOfSets.addToBigSet(L)
             println("In " + l_w + " ⊑ " + L)
+						setOfSets.addToListBuffer(l_w, L)
             println("In " + l + " ⊑ " + L)
-          //l_w ⊑ L()
-          //l ⊑ L()
+						setOfSets.addToListBuffer(l, L)
           L
         }
 
@@ -157,20 +165,17 @@ case class evalLevel(){
         case Let( xes, t ) ⇒
         {
             println("Whats in xes? " + xes)
-          //val (xs, es) = xes unzip;
           val xls = xes map { case _ ⇒ LVar()}
           println("Whats in xls? " + xls)
 
-          //l_w ⊑ L()
 
 
           val ρ1 = ρ +++ (xes zip xls)
            println("Whats in ρ1? " + ρ1)
            xls.foreach(i => { println("Let " + l_w + " ⊑ " + i) 
-																setOfSets.addToBigSet(i)})
-          /*val eτs = es map ( inScope( ρ1 ) eval(_) )
+																setOfSets.addToBigSet(i)
+																setOfSets.addToListBuffer(l_w, i)})
 
-          (xτs zip eτs) foreach { case (τ1, τ2) ⇒ τ1 ≡ τ2 } */
           eval(ρ1, l_w, t )
 
         }

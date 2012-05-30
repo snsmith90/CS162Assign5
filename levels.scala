@@ -1,5 +1,5 @@
 package cs162.miniJS.levels
-import scala.collection.mutable.{ Queue, Set, List }
+import scala.collection.mutable.{ Queue, Set, ListBuffer }
 
 // exception for illtyped programs
 object illtyped extends Exception
@@ -217,13 +217,21 @@ object TVar {
 
 // element 0 in each subset in bigSet denotes the level the set belongs to
 object setOfSets {
-	var bigSet = Set.empty[List[Level]]
-	var littleTempSet = Set.empty[Level]
+	var bigSet = Set.empty[ListBuffer[Level]]
+	var littleTempListBuffer = new ListBuffer[Level]
 
 	def addToBigSet( l:Level ) {
-		littleTempSet += l
-		bigSet += littleTempSet.clone
-		littleTempSet.clear()
+		littleTempListBuffer += l
+		bigSet += littleTempListBuffer.clone
+		littleTempListBuffer.clear()
+	}
+
+	def addToListBuffer (l:Level, levelToAdd:Level) {
+			bigSet.foreach( i => if (i.head == l) {
+						i += levelToAdd
+					}
+
+  			)	 
 	}
 }
 
