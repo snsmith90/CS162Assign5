@@ -25,11 +25,13 @@ object Checker {
 		setOfSets.addToBigSet(Bob)
 		setOfSets.addToBigSet(Public)
 
-
-
+  	//System.exit(1)
     evalLevel().eval(Env(),Public, ast)
 
 		println("bigSet: " +setOfSets.bigSet)
+		println("Secure") 
+
+		
   }
   
 }
@@ -87,9 +89,13 @@ case class evalLevel(){
         {
           println("Output " + l_w + " ⊑ " + l)
 					setOfSets.addToListBuffer(l_w, l)
+					val result = BFS.algo(l_w)
+
+					if (!result) { System.exit(1); println("Not Secure") }
           var l1 = eval( ρ, l_w, e )
           println("Output " + l1 + " ⊑ " + l)
 					setOfSets.addToListBuffer(l1, l)
+
           l_w
         }
 

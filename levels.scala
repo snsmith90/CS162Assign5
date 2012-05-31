@@ -233,8 +233,51 @@ object setOfSets {
 
   			)	 
 	}
+
 }
 
-object BFSqueue {
-	var queue = new Queue()
+object BFS {
+	var queue = new Queue[Level]
+
+	def algo(rootNode:Level): Boolean = {
+			var isTrue = false
+			queue += rootNode
+			if (rootNode == Public) {
+				isTrue = true
+			}
+		
+		while (!queue.isEmpty || !isTrue) {
+			// dequeue a node from queue
+				val head = queue.dequeue()
+				if(rootNode == Secret) {
+					if(head == Alice || head == Bob || head == Public) {
+						false
+					}
+				}
+				else if (rootNode == Bob) {
+					if(head == Alice || head == Public) {
+						false
+					}
+				}
+				else if (rootNode == Alice) {
+					if(head == Public) {
+						false
+					}
+				}
+			//  and examine elements 1..n for that subset
+			setOfSets.bigSet.foreach( i => if (i.head == head) {
+						i.tail.foreach( j => queue += j)
+					}
+
+  			)	 
+			}			
+
+				//  if it's still secure, enqueue all its childer
+				// if it's not, stop program
+	
+			// if queue is empty, entire graph has been searched --> program is secure
+
+			// if queue not empty, dequeue node again (repeat step 2)
+			true
+	}
 }
