@@ -29,6 +29,12 @@ object Checker {
     evalLevel().eval(Env(),Public, ast)
 
 		println("bigSet: " +setOfSets.bigSet)
+		println("Checking Secret...")
+		BFS.algo(Secret)
+		println("Checking Alice...")
+		BFS.algo(Alice)
+		println("Checking Bob...")
+		BFS.algo(Bob)
 		println("Secure") 
 
 		
@@ -89,12 +95,12 @@ case class evalLevel(){
         {
           println("Output " + l_w + " ⊑ " + l)
 					setOfSets.addToListBuffer(l_w, l)
-					val result = BFS.algo(l_w)
+					//BFS.algo(l_w)
 
-					if (!result) { System.exit(1); println("Not Secure") }
           var l1 = eval( ρ, l_w, e )
           println("Output " + l1 + " ⊑ " + l)
 					setOfSets.addToListBuffer(l1, l)
+					//BFS.algo(l1)
 
           l_w
         }
